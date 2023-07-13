@@ -2,6 +2,7 @@
 
 namespace Homework1
 {
+
     public class Program
     {
         public static void Main(string[] args)  // 该程序用于Debug
@@ -60,6 +61,59 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        static int totalNum = 0;
+
+        int num;
+        int bar;
+        int req;
+        public int Num { get { return num; } }
+
+        public int RequiredProgress { get { return req; } }
+        public int FinishedProgress { get { return bar; } }
+
+        public bool Start(int requiredProgress)
+        {
+            if (req > bar)
+                return false;
+            else
+            {
+                if (requiredProgress < 0)
+                {
+                    throw new Exception("RequiredProgress must be positive. (Parameter 'Homework1.Progress')");
+                }
+                bar = 0;
+                req = requiredProgress;
+                totalNum++;
+                num = totalNum;
+                return true;
+            }
+        }
+
+        public void Add(int addProgress)
+        {
+            bar += addProgress;
+            if(bar > req)
+                bar = req;
+        }
+        public void Sub(int subProgress)
+        {
+            bar -= subProgress;
+            if (bar < 0)
+                bar = 0;
+        }
+
+        public void Double()
+        {
+            bar *= 2;
+            if (bar > req)
+                bar = req;
+        }
+
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (bar, req);
+        }
+
     }
 
 /*
