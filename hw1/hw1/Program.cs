@@ -55,11 +55,73 @@ namespace Homework1
         public (int FinishedProgress, int RequiredProgress) GetProgress();
     }
 
-    public class Progress : IProgress
+   public class Progress : IProgress
     {
-        // 一个进度条
-        // 只允许修改Progress类中的代码
-        // 要求实现IProgress中的要求
+        private int num;
+        private int requiredProgress;
+        private int finishedProgress;
+
+        public Progress()
+        {
+            num = 0;
+            requiredProgress = 0;
+            finishedProgress = 0;
+        }
+
+        public int Num => num;
+        public int RequiredProgress => requiredProgress;
+        public int FinishedProgress => finishedProgress;
+
+        public bool Start(int RequiredProgress)
+        {
+            if (finishedProgress >= requiredProgress)
+            {
+                if (RequiredProgress < 0)
+                {
+                    throw new ArgumentException("RequiredProgress must be positive.", nameof(Progress));
+                }
+                this.requiredProgress = RequiredProgress;
+                finishedProgress = 0;
+            }
+            else
+            {
+                return false;
+            }
+            num++;
+            return true;
+        }
+
+        public void Add(int addProgress)
+        {
+            finishedProgress += addProgress;
+            if (finishedProgress > requiredProgress)
+            {
+                finishedProgress = requiredProgress;
+            }
+        }
+
+        public void Sub(int subProgress)
+        {
+            finishedProgress -= subProgress;
+            if (finishedProgress < 0)
+            {
+                finishedProgress = 0;
+            }
+        }
+
+        public void Double()
+        {
+            finishedProgress *= 2;
+            if(finishedProgress > requiredProgress)
+            { 
+                finishedProgress = requiredProgress;
+            }
+        }
+
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (finishedProgress, requiredProgress);
+        }
     }
 
 /*
