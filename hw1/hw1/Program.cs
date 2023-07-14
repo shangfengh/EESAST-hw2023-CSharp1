@@ -60,6 +60,58 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        public int Num { get; private set; } 
+        public int RequiredProgress { get; private set; } 
+        public int FinishedProgress { get; private set; } 
+
+
+        public bool Start(int requiredProgress)
+        {
+            if (this.FinishedProgress == this.RequiredProgress)
+            {
+                if (requiredProgress < 0)
+                {
+                    throw new Exception("RequiredProgress must be positive. (Parameter 'Homework1.Progress')");
+                }
+                this.FinishedProgress = 0;
+                this.RequiredProgress = requiredProgress;
+                ++this.Num;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void Add(int addProgress)
+        {
+            this.FinishedProgress += addProgress;
+            if (this.FinishedProgress > this.RequiredProgress)
+            {
+                this.FinishedProgress = this.RequiredProgress;
+            }
+        }
+        public void Sub(int subProgress)
+        {
+            this.FinishedProgress -= subProgress;
+            if (this.FinishedProgress < 0)
+            {
+                this.FinishedProgress = 0;
+            }
+        }
+        public void Double()
+        {
+            this.FinishedProgress *= 2;
+            if (this.FinishedProgress > this.RequiredProgress)
+            {
+                this.FinishedProgress = this.RequiredProgress;
+            }
+        }
+
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (this.FinishedProgress, this.RequiredProgress);
+        }
     }
 
 /*
