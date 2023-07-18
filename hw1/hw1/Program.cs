@@ -115,7 +115,7 @@ namespace Homework1
         FinishedProgress = FinishedProgress > RequiredProgress ? RequiredProgress : FinishedProgress;
     }
 
-        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        public (int FinishedProgress, int RequiredProgress) GetProgress()//获取进度
         {
             return (FinishedProgress, RequiredProgress);
         }
