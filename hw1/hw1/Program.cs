@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata;
 
 namespace Homework1
 {
@@ -60,6 +61,63 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        public int num;
+        public int Num { 
+            get=>num;set=>num=value;
+        } 
+        public int requiredProgress = 0;
+        public int RequiredProgress { 
+            get => requiredProgress; set => requiredProgress = value;
+        }
+        public int finishedProgress = 0;
+        public int FinishedProgress { 
+            get => finishedProgress; set => finishedProgress = value;
+        }
+        public bool Start(int x)
+        {
+            if(finishedProgress < requiredProgress)
+            {
+                return false;
+            }
+            else if(x < 0)
+            {
+                throw new Exception("RequiredProgress must be positive. (Parameter 'Homework1.Progress')");
+            }
+            else
+            {
+                finishedProgress = 0;
+                requiredProgress = x;
+                return true;
+            }
+        }
+        public void Add(int x)
+        {
+            finishedProgress += x;
+            if(finishedProgress > requiredProgress)
+            {
+                finishedProgress = requiredProgress;
+            }
+        }
+        public void Sub(int x)
+        {
+            finishedProgress -= x;
+            if(finishedProgress < 0)
+            {
+                finishedProgress = 0;
+            }
+        }
+        public void Double()
+        {
+            finishedProgress *= 2;
+            if(finishedProgress > requiredProgress)
+            {
+                finishedProgress = requiredProgress;
+            }
+        }
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (finishedProgress, requiredProgress);
+        }
     }
 
 /*
