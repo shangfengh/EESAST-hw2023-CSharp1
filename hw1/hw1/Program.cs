@@ -58,7 +58,7 @@ namespace Homework1
     public class Progress : IProgress
     {
         
-        public int num;
+        public static int num=0;
         public int requiredprogress;
         public int finishedprogress;
         public int Num { get { return num; } }
@@ -67,22 +67,16 @@ namespace Homework1
         
         public bool Start(int requiredprogress)
         {
-            finishedprogress = 0;
-            this.requiredprogress = requiredprogress;
-            if(requiredprogress < 0)
+            if (FinishedProgress >= RequiredProgress)
             {
-                throw new ArgumentOutOfRangeException(nameof(Homework1.Progress), "RequiredProgress must be positive.");
-            }
-            if(requiredprogress==finishedprogress)
-            {
+                if (requiredprogress <= 0)
+                    throw new System.Exception("RequiredProgress must be positive. (Parameter 'Homework1.Progress')");
+                this.requiredprogress = requiredprogress;
+                finishedprogress = 0;
+                num++;
                 return true;
             }
-            if(finishedprogress<requiredprogress)
-            {
-                return false;
-            }
-           return false;
-
+            return false;
         }
         public void Add(int addprogress)
         {if (addprogress < 0)
@@ -91,7 +85,7 @@ namespace Homework1
             {
                 if (finishedprogress + addprogress >= requiredprogress)
                 {
-                    
+                    num++;
                     finishedprogress = requiredprogress;
                 }
                 else
@@ -106,7 +100,7 @@ namespace Homework1
                 Console.WriteLine("请输入正数！");
             else
             {
-                if (finishedprogress - subprogress <=0)
+                if (finishedprogress <= subprogress )
                 {
                     finishedprogress = 0;
                 }
