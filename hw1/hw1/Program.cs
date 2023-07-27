@@ -57,9 +57,57 @@ namespace Homework1
 
     public class Progress : IProgress
     {
+        public static int count = 0;
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        public int Num { get; set; } // Progress的序号，表明是第几个实例化的Progress
+        public int RequiredProgress { get; set; } // Progress加载完成所需进度
+        public int FinishedProgress { get; set; } // FinishedProgress指其中已完成的进度, FinishedProgress应当在[0,RequiredProgress]中
+
+        public Progress()
+        {
+            Num = count++;
+        }
+
+        public bool Start(int requiredProgress)
+        {
+            if(FinishedProgress == RequiredProgress)
+            {
+                if (requiredProgress < 0)
+                {
+                    throw new Exception("RequiredProgress must be positive!");
+                }
+                FinishedProgress = 0;
+                RequiredProgress = requiredProgress;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void Add(int addProgress)
+        {
+            FinishedProgress = FinishedProgress + addProgress < RequiredProgress ? FinishedProgress + addProgress : RequiredProgress;
+        }
+        public void Sub(int subProgress)
+        {
+            FinishedProgress = FinishedProgress - subProgress >= 0 ? FinishedProgress - subProgress : 0;
+        }
+        public void Double()
+        {
+            FinishedProgress = FinishedProgress * 2 < RequiredProgress ? FinishedProgress * 2 : RequiredProgress;
+        }
+
+        /// <summary>
+        ///  FinishedProgress指其中已完成的进度，RequiredProgress指当前Progress完成所需进度
+        /// </summary>
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (FinishedProgress, RequiredProgress);
+        }
     }
 
 /*
