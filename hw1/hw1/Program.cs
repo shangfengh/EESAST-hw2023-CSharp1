@@ -60,6 +60,60 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        public static int Anum = 0;
+
+        public int Num { get; private set; } // Progress的序号，表明是第几个实例化的Progress
+        public int RequiredProgress { get; private set; } // Progress加载完成所需进度
+        private int finishedProgress;
+        public int FinishedProgress {
+            get => finishedProgress;
+            private set {
+                finishedProgress = value;
+                if (value > RequiredProgress)
+                    finishedProgress = RequiredProgress;
+                if (value < 0)
+                    finishedProgress = 0;
+            }
+        } // FinishedProgress指其中已完成的进度, FinishedProgress应当在[0,RequiredProgress]中
+
+        /// <summary>
+        /// 尝试加载下一次进度条，requiredProgress指再次加载进度条所需进度
+        /// 如果之前进度条已经加载完成，则将进度清零开始下一次加载，返回true，但如果requiredProgress<0，应当报错
+        /// 如果之前进度条尚未加载完成，返回false
+        /// </summary>
+
+        public Progress() {
+            Anum++;
+            Num = Anum;
+            finishedProgress = RequiredProgress = FinishedProgress = 0;
+        }
+
+        public bool Start(int requiredProgress) {
+            if (FinishedProgress < RequiredProgress)
+                return false;
+            if (requiredProgress < 0)
+                throw new Exception("RequiredProgress must be positive.");
+            RequiredProgress = requiredProgress;
+            FinishedProgress = 0;
+            return true;
+        }
+
+        public void Add(int addProgress) {
+            FinishedProgress += addProgress;
+        }
+        public void Sub(int subProgress) {
+            FinishedProgress -= subProgress;
+        }
+        public void Double() {
+            FinishedProgress *= 2;
+        }
+
+        /// <summary>
+        ///  FinishedProgress指其中已完成的进度，RequiredProgress指当前Progress完成所需进度
+        /// </summary>
+        public (int FinishedProgress, int RequiredProgress) GetProgress() {
+            return (FinishedProgress, RequiredProgress);
+        }
     }
 
 /*
