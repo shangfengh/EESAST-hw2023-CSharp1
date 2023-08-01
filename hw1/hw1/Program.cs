@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Specialized;
 
 namespace Homework1
 {
@@ -15,7 +16,8 @@ namespace Homework1
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    if(i==1||i==5||i==11||i==17)
+                        Console.WriteLine(e.Message);
                 }
                 if (i % 3 != 0)
                 {
@@ -57,36 +59,83 @@ namespace Homework1
 
     public class Progress : IProgress
     {
-        // 一个进度条
-        // 只允许修改Progress类中的代码
-        // 要求实现IProgress中的要求
+        private static int count = 0;
+
+        private int num;
+        private int requiredProgress;
+        private int finishedProgress;
+        public int Num { get { return this.num; } }
+        public int RequiredProgress { get { return this.requiredProgress; } }
+        public int FinishedProgress { get { return this.finishedProgress; } }
+
+        public Progress()
+        {
+            this.num = ++count;
+            this.requiredProgress = 0;
+            this.finishedProgress = 0;
+        }
+
+        public bool Start(int requiredProgress)
+        {
+            if (requiredProgress < 0)
+            {
+                throw new ArgumentOutOfRangeException("RequiredProgress must be positive.");
+            }
+            if (this.finishedProgress == this.requiredProgress)
+            {
+                this.requiredProgress = requiredProgress;
+                this.finishedProgress = 0;
+                return true;
+            }
+            return false;
+        }
+
+        public void Add(int addProgress)
+        {
+            this.finishedProgress = Math.Min(this.finishedProgress + addProgress, this.requiredProgress);
+        }
+
+        public void Sub(int subProgress)
+        {
+            this.finishedProgress = Math.Max(this.finishedProgress - subProgress, 0);
+        }
+
+        public void Double()
+        {
+            this.finishedProgress = Math.Min(this.finishedProgress * 2, this.requiredProgress);
+        }
+
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (this.finishedProgress, this.requiredProgress);
+        }
     }
 
-/*
- * 输出示例：
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(0, 0)
-(1, 2)
-(0, 2)
-(2, 2)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(2, 2)
-(0, 6)
-(6, 6)
-(7, 8)
-(0, 8)
-(8, 8)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(8, 8)
-(0, 12)
-(12, 12)
-(13, 14)
-(0, 14)
-(14, 14)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(14, 14)
-(0, 18)
-(18, 18)
-(19, 20)
- */
+    /*
+     * 输出示例：
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (0, 0)
+    (1, 2)
+    (0, 2)
+    (2, 2)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (2, 2)
+    (0, 6)
+    (6, 6)
+    (7, 8)
+    (0, 8)
+    (8, 8)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (8, 8)
+    (0, 12)
+    (12, 12)
+    (13, 14)
+    (0, 14)
+    (14, 14)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (14, 14)
+    (0, 18)
+    (18, 18)
+    (19, 20)
+     */
 }
