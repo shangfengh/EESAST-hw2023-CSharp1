@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Metrics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Homework1
 {
@@ -43,7 +45,7 @@ namespace Homework1
         /// 如果之前进度条已经加载完成，则将进度清零开始下一次加载，返回true，但如果requiredProgress<0，应当报错
         /// 如果之前进度条尚未加载完成，返回false
         /// </summary>
-        public bool Start(int requiredProgress); 
+        public bool Start(int requiredProgress);
         
         public void Add(int addProgress); //增加addProgress的进度
         public void Sub(int subProgress); //减少subProgress的进度
@@ -60,6 +62,72 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        static public int counter = 0;
+        public int Num { get; set; } // Progress的序号，表明是第几个实例化的Progress
+        public int RequiredProgress { get; set; } // Progress加载完成所需进度
+        public int FinishedProgress { get; set; } // FinishedProgress指其中已完成的进度, FinishedProgress应当在[0,RequiredProgress]中public int Num { get; }
+        public Progress()
+        {
+            counter++;
+            Num = counter;
+        }
+        public void Add(int addProgress)
+        {
+            if (FinishedProgress + addProgress <= RequiredProgress)
+            {
+                if(FinishedProgress + addProgress>=0)
+                FinishedProgress += addProgress;
+                else FinishedProgress = 0;
+            }
+            else
+            {
+                FinishedProgress = RequiredProgress;
+            }
+        }
+        public void Sub(int subProgress)
+        {
+            if(FinishedProgress - subProgress >=0)
+            {
+                if(FinishedProgress-subProgress <=RequiredProgress)
+                FinishedProgress -= subProgress;
+                else FinishedProgress = RequiredProgress;
+            }
+            else
+            {
+                FinishedProgress = 0;
+            }
+        }
+
+        public void Double()
+        { 
+            if(2*FinishedProgress<=RequiredProgress)
+            {
+                FinishedProgress = 2 * FinishedProgress;
+            }
+            else { FinishedProgress = RequiredProgress; }
+        }
+            
+        /// <summary>
+        ///  FinishedProgress指其中已完成的进度，RequiredProgress指当前Progress完成所需进度
+        /// </summary>
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (FinishedProgress, RequiredProgress);
+        }
+        public bool Start(int requiredProgress)
+        {
+
+            if(requiredProgress>0)
+            {
+               RequiredProgress = requiredProgress;
+                return true;
+            }
+            else
+            {
+                throw (new Exception("RequiredProgress must be positive."));
+            }
+            
+        }
     }
 
 /*
