@@ -60,6 +60,65 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        public int Num { get; set };
+        public int RequiredProgress { get; set };
+        public int FinishedProgress { get; set };
+        //构造函数
+        public progress()
+        {
+            this->Num = 1;
+            this->RequiredProgress = 0;
+            this->FinishedProgress = 0;
+        }
+
+        public bool Start(int requiredProgress)
+        {
+            if (requiredProgress <= 0)
+            {
+                throw new Exception("RequiredProgress must be positive. (Parameter 'Homework1.Progress')");
+            }
+            else
+            {
+                if（FinishedProgress >= RequiredProgress）
+                    {
+                    FinishedProgress = 0
+                        if (RequiredProgress != 0)
+                    {
+                        Num++;
+                    }
+
+                    RequiredProgress = requiredProgress;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public void Add(int addProgress) //增加addProgress的进度
+        {
+            FinishedProgress += addProgress;
+            FinishedProgress = FinishedProgress > RequiredProgress ? RequiredProgress : FinishedProgress;
+        }
+
+        public void Sub(int subProgress)//减少subProgress的进度
+        {
+            FinishedProgress -= subProgress;
+            FinishedProgress  = FinishedProgress < 0 ? 0:FinishedProgress;
+        }
+
+    public void Double() //进度翻倍
+    {
+        FinishedProgress *= 2;
+        FinishedProgress = FinishedProgress > RequiredProgress ? RequiredProgress : FinishedProgress;
+    }
+
+        public (int FinishedProgress, int RequiredProgress) GetProgress()//获取进度
+        {
+            return (FinishedProgress, RequiredProgress);
+        }
     }
 
 /*
