@@ -60,11 +60,18 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+
+        private static int count = 0;
         public int Num { get; }
 
         public int RequiredProgress { get; private set; }
 
         public int FinishedProgress { get; private set; }
+
+        public Progress()
+        {
+            Num = ++count;
+        }
 
         public bool Start(int requiredProgress)
         {
