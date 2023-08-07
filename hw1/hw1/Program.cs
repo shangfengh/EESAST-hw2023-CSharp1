@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Homework1;
+using System;
 
 namespace Homework1
 {
@@ -11,7 +12,7 @@ namespace Homework1
             {
                 try
                 {
-                    progress.Start(i*((i%2==0)?1:-1));
+                    progress.Start(i * ((i % 2 == 0) ? 1 : -1));
                 }
                 catch (Exception e)
                 {
@@ -19,9 +20,9 @@ namespace Homework1
                 }
                 if (i % 3 != 0)
                 {
-                    progress.Add(i-1);
+                    progress.Add(i - 1);
                 }
-                else progress.Sub(i-1);
+                else progress.Sub(i - 1);
 
                 if (i == 6 || i == 7)
                 {
@@ -43,8 +44,8 @@ namespace Homework1
         /// 如果之前进度条已经加载完成，则将进度清零开始下一次加载，返回true，但如果requiredProgress<0，应当报错
         /// 如果之前进度条尚未加载完成，返回false
         /// </summary>
-        public bool Start(int requiredProgress); 
-        
+        public bool Start(int requiredProgress);
+
         public void Add(int addProgress); //增加addProgress的进度
         public void Sub(int subProgress); //减少subProgress的进度
         public void Double(); //进度翻倍
@@ -57,9 +58,57 @@ namespace Homework1
 
     public class Progress : IProgress
     {
-        // 一个进度条
-        // 只允许修改Progress类中的代码
-        // 要求实现IProgress中的要求
+        public static int num;
+        public int requiredProgress;
+        public int finishedProgress;
+        public int Num
+        {
+            get { return num; }
+        }
+        public int RequiredProgress
+        {
+            get { return requiredProgress; }
+        }
+        public int FinishedProgress
+        {
+            get { return finishedProgress; }
+        }
+        public bool Start(int requiredProgress)
+        {
+            finishedProgress = 0;
+            this.requiredProgress = requiredProgress; 
+            if (requiredProgress < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(Homework1.Progress), "RequiredProgress must be positive.");
+            }
+            if (finishedProgress == requiredProgress)
+            {
+                finishedProgress= 0;
+                num++;
+                return true;
+            }
+            if (finishedProgress < requiredProgress) return false;
+            return false;
+        }
+        public void Add(int addProgress)
+        {
+            finishedProgress += addProgress;
+            if (finishedProgress > requiredProgress) { finishedProgress = requiredProgress; }
+        }
+        public void Sub(int subProgress)
+        {
+            finishedProgress -= subProgress;
+            if (finishedProgress < 0) { finishedProgress = 0; }
+        }
+        public void Double()
+        {
+            finishedProgress *= 2;
+            if (finishedProgress > requiredProgress){finishedProgress = requiredProgress;}
+        }
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (FinishedProgress, RequiredProgress);
+        }
     }
 
 /*
