@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Reflection.Metadata.Ecma335;
 
 namespace Homework1
 {
@@ -11,7 +11,7 @@ namespace Homework1
             {
                 try
                 {
-                    progress.Start(i*((i%2==0)?1:-1));
+                    progress.Start(i * ((i % 2 == 0) ? 1 : -1));
                 }
                 catch (Exception e)
                 {
@@ -19,9 +19,9 @@ namespace Homework1
                 }
                 if (i % 3 != 0)
                 {
-                    progress.Add(i-1);
+                    progress.Add(i - 1);
                 }
-                else progress.Sub(i-1);
+                else progress.Sub(i - 1);
 
                 if (i == 6 || i == 7)
                 {
@@ -43,8 +43,8 @@ namespace Homework1
         /// 如果之前进度条已经加载完成，则将进度清零开始下一次加载，返回true，但如果requiredProgress<0，应当报错
         /// 如果之前进度条尚未加载完成，返回false
         /// </summary>
-        public bool Start(int requiredProgress); 
-        
+        public bool Start(int requiredProgress);
+
         public void Add(int addProgress); //增加addProgress的进度
         public void Sub(int subProgress); //减少subProgress的进度
         public void Double(); //进度翻倍
@@ -57,36 +57,80 @@ namespace Homework1
 
     public class Progress : IProgress
     {
-        // 一个进度条
+        public static int num = 0;
+        public Progress()
+        {
+            num++;
+        }
+        public int Num
+        {
+            get
+            {
+                return num;
+            }
+        }
+        public int RequiredProgress { get; set; }
+        public int FinishedProgress { get; set; }
+        public void Add(int addProgress)
+        {
+            FinishedProgress += addProgress;
+            if (FinishedProgress > RequiredProgress) { FinishedProgress = RequiredProgress; }
+        }
+        public void Sub(int subProgress)
+        {
+            FinishedProgress -= subProgress;
+            if (FinishedProgress < 0) { FinishedProgress = 0; }
+        }
+        public void Double()
+        {
+            FinishedProgress *= 2;
+            if (FinishedProgress > RequiredProgress) { FinishedProgress = RequiredProgress; }
+        }
+        public bool Start(int requiredProgress)
+        {
+            if (FinishedProgress == RequiredProgress)
+            {
+                if (requiredProgress < 0)
+                    throw new Exception("RequiredProgress must be positive");
+                else
+                {
+                    RequiredProgress = requiredProgress;
+                    FinishedProgress = 0;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public (int FinishedProgress, int RequiredProgress) GetProgress() { return (FinishedProgress, RequiredProgress); }
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
     }
 
-/*
- * 输出示例：
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(0, 0)
-(1, 2)
-(0, 2)
-(2, 2)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(2, 2)
-(0, 6)
-(6, 6)
-(7, 8)
-(0, 8)
-(8, 8)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(8, 8)
-(0, 12)
-(12, 12)
-(13, 14)
-(0, 14)
-(14, 14)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(14, 14)
-(0, 18)
-(18, 18)
-(19, 20)
- */
+    /*
+     * 输出示例：
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (0, 0)
+    (1, 2)
+    (0, 2)
+    (2, 2)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (2, 2)
+    (0, 6)
+    (6, 6)
+    (7, 8)
+    (0, 8)
+    (8, 8)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (8, 8)
+    (0, 12)
+    (12, 12)
+    (13, 14)
+    (0, 14)
+    (14, 14)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (14, 14)
+    (0, 18)
+    (18, 18)
+    (19, 20)
+     */
 }
