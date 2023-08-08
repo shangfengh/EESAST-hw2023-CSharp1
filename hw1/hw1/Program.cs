@@ -57,6 +57,72 @@ namespace Homework1
 
     public class Progress : IProgress
     {
+        
+        public static int num=0;
+        public int requiredprogress;
+        public int finishedprogress;
+        public int Num { get { return num; } }
+        public int RequiredProgress { get { return requiredprogress; } }
+        public int FinishedProgress { get { return finishedprogress; } }
+        
+        public bool Start(int requiredprogress)
+        {
+            if (FinishedProgress >= RequiredProgress)
+            {
+                if (requiredprogress <= 0)
+                    throw new System.Exception("RequiredProgress must be positive. (Parameter 'Homework1.Progress')");
+                this.requiredprogress = requiredprogress;
+                finishedprogress = 0;
+                num++;
+                return true;
+            }
+            return false;
+        }
+        public void Add(int addprogress)
+        {if (addprogress < 0)
+                Console.WriteLine("请输入正数！");
+            else
+            {
+                if (finishedprogress + addprogress >= requiredprogress)
+                {
+                    num++;
+                    finishedprogress = requiredprogress;
+                }
+                else
+                {
+                    finishedprogress+=addprogress;
+                }
+            }
+        }
+        public void Sub(int subprogress)
+        {
+            if (subprogress < 0)
+                Console.WriteLine("请输入正数！");
+            else
+            {
+                if (finishedprogress <= subprogress )
+                {
+                    finishedprogress = 0;
+                }
+                else
+                {
+                    finishedprogress -= subprogress;
+                }
+            }
+        }
+        public void Double()
+        {
+            finishedprogress = finishedprogress * 2;
+            if(finishedprogress > requiredprogress)
+            {
+                finishedprogress = requiredprogress;
+                
+            }
+        }
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return (FinishedProgress, RequiredProgress);
+        }
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
