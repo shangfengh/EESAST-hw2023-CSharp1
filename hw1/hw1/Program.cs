@@ -60,33 +60,117 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        public static int progressCounter = 1; //计数器
+
+        // Progress的序号，表明是第几个实例化的Progress
+        private int num;
+        public int Num
+        { 
+            get
+            {
+                return num;
+            }
+            set
+            {
+                progressCounter++;
+                num = progressCounter;
+            }
+        }
+
+        // Progress加载完成所需进度
+        private int requiredProgress;
+        public int RequiredProgress
+        {
+            get
+            {
+                return requiredProgress;
+            }
+            set
+            {
+                requiredProgress = value;
+            }
+        }
+
+        // FinishedProgress指其中已完成的进度, FinishedProgress应当在[0,RequiredProgress]中
+        private int finishedProgress;
+        public int FinishedProgress
+        {
+            get
+            {
+                return finishedProgress;
+            }
+
+            set
+            {
+                finishedProgress = value;
+            }
+        } // FinishedProgress指其中已完成的进度, FinishedProgress应当在[0,RequiredProgress]中
+
+        public bool Start(int requiredProgress)
+        {
+            if (FinishedProgress < RequiredProgress) return false;
+            else
+            {
+                if (requiredProgress < 0) throw new ArgumentException("RequiredProgress must be positive.", System.Reflection.MethodBase.GetCurrentMethod().ReflectedType.FullName);
+                else
+                {
+                    RequiredProgress = requiredProgress;
+                    FinishedProgress = 0;
+                    Num++;
+                    return true;
+                }
+            }
+        }
+
+        public void Add(int addProgress)
+        {
+            FinishedProgress += addProgress;
+            if (FinishedProgress > RequiredProgress) FinishedProgress = RequiredProgress;
+        }
+
+        public void Sub(int subProgress)
+        {
+            FinishedProgress -= subProgress;
+            if(FinishedProgress < 0) FinishedProgress = 0;
+        }
+
+        public void Double()
+        {
+            FinishedProgress *= 2;
+            if (FinishedProgress > RequiredProgress) FinishedProgress = RequiredProgress;
+        }
+
+        public (int FinishedProgress, int RequiredProgress) GetProgress()
+        {
+            return(FinishedProgress,  RequiredProgress);
+        }
     }
 
-/*
- * 输出示例：
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(0, 0)
-(1, 2)
-(0, 2)
-(2, 2)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(2, 2)
-(0, 6)
-(6, 6)
-(7, 8)
-(0, 8)
-(8, 8)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(8, 8)
-(0, 12)
-(12, 12)
-(13, 14)
-(0, 14)
-(14, 14)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(14, 14)
-(0, 18)
-(18, 18)
-(19, 20)
- */
+    /*
+     * 输出示例：
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (0, 0)
+    (1, 2)
+    (0, 2)
+    (2, 2)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (2, 2)
+    (0, 6)
+    (6, 6)
+    (7, 8)
+    (0, 8)
+    (8, 8)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (8, 8)
+    (0, 12)
+    (12, 12)
+    (13, 14)
+    (0, 14)
+    (14, 14)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (14, 14)
+    (0, 18)
+    (18, 18)
+    (19, 20)
+     */
 }
