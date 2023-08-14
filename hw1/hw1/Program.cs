@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Homework1
 {
     public class Program
@@ -38,11 +37,6 @@ namespace Homework1
         public int RequiredProgress { get; } // Progress加载完成所需进度
         public int FinishedProgress { get; } // FinishedProgress指其中已完成的进度, FinishedProgress应当在[0,RequiredProgress]中
 
-        /// <summary>
-        /// 尝试加载下一次进度条，requiredProgress指再次加载进度条所需进度
-        /// 如果之前进度条已经加载完成，则将进度清零开始下一次加载，返回true，但如果requiredProgress<0，应当报错
-        /// 如果之前进度条尚未加载完成，返回false
-        /// </summary>
         public bool Start(int requiredProgress); 
         
         public void Add(int addProgress); //增加addProgress的进度
@@ -57,9 +51,57 @@ namespace Homework1
 
     public class Progress : IProgress
     {
-        // 一个进度条
-        // 只允许修改Progress类中的代码
-        // 要求实现IProgress中的要求
+        private int num=0;
+        private int requiredProgress;
+        private int finishedProgress;
+        public int Num => num;
+        public int RequiredProgress => requiredProgress;
+        public int FinishedProgress => finishedProgress;
+        public Progress()
+        {
+            num++;
+        }
+        public bool Start(int requiredProgress)
+        {
+            if(requiredProgress<0)
+            {
+                throw new ArgumentException("Required progress cannot be negative.");
+            }
+            if(finishedProgress==this.requiredProgress)
+            {
+                finishedProgress = 0;
+                this.requiredProgress = requiredProgress;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void Add(int addProgress)
+        {
+            finishedProgress += addProgress;
+            if(finishedProgress >= requiredProgress)
+                finishedProgress = requiredProgress;
+        }
+        public void Sub(int subProgress) 
+        {
+            finishedProgress -= subProgress;
+            if(finishedProgress<0)
+            {
+                finishedProgress = 0;
+            }
+        }
+        public void Double() 
+        {
+            finishedProgress = 2 * finishedProgress;
+            if(finishedProgress >= requiredProgress)
+                finishedProgress = requiredProgress;
+        }
+        public (int FinishedProgress,int RequiredProgress) GetProgress() 
+        {
+            return (finishedProgress, requiredProgress);
+        }
     }
 
 /*
