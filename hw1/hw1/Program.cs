@@ -83,7 +83,9 @@ namespace Homework1
         {
             num++;
             Num=num;
-            finishedProgress=RequiredProgress=FinishedProgress=0;
+            finishedProgress=0;
+            RequiredProgress=0;
+            FinishedProgress=0;
         }
         public bool Start(int requiredProgress)
         {
