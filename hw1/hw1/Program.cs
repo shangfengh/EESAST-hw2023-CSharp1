@@ -60,33 +60,56 @@ namespace Homework1
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
+        static public int num;
+        public int Num{get;}
+        private int requiredProgress;
+        public int RequiredProgress{get;}
+        private int finishedProgress;
+        public int FinishedProgress{get;}
+        public Progress()=>num++;
+        public bool Start(int requiredProgress)
+        {
+            if (finishedProgress==this.requiredProgress)
+            {
+                if (requiredProgress < 0)
+                    throw new Exception("RequiredProgress must be positive. (Parameter 'Homework1.Progress')");
+                this.requiredProgress=requiredProgress;
+                finishedProgress=0;
+                return true;
+            }
+            return false;
+        }
+        public void Add(int addProgress)=>finishedProgress=(finishedProgress+addProgress<=requiredProgress)?finishedProgress+addProgress:requiredProgress;
+        public void Sub(int subProgress)=>finishedProgress=(finishedProgress-subProgress>=0)?finishedProgress-subProgress:0;
+        public void Double()=>finishedProgress=(finishedProgress*2<=requiredProgress)?finishedProgress*2:requiredProgress;
+        public (int FinishedProgress,int RequiredProgress) GetProgress()=>(finishedProgress,requiredProgress);
     }
 
-/*
- * 输出示例：
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(0, 0)
-(1, 2)
-(0, 2)
-(2, 2)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(2, 2)
-(0, 6)
-(6, 6)
-(7, 8)
-(0, 8)
-(8, 8)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(8, 8)
-(0, 12)
-(12, 12)
-(13, 14)
-(0, 14)
-(14, 14)
-RequiredProgress must be positive. (Parameter 'Homework1.Progress')
-(14, 14)
-(0, 18)
-(18, 18)
-(19, 20)
- */
+    /*
+     * 输出示例：
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (0, 0)
+    (1, 2)
+    (0, 2)
+    (2, 2)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (2, 2)
+    (0, 6)
+    (6, 6)
+    (7, 8)
+    (0, 8)
+    (8, 8)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (8, 8)
+    (0, 12)
+    (12, 12)
+    (13, 14)
+    (0, 14)
+    (14, 14)
+    RequiredProgress must be positive. (Parameter 'Homework1.Progress')
+    (14, 14)
+    (0, 18)
+    (18, 18)
+    (19, 20)
+     */
 }
