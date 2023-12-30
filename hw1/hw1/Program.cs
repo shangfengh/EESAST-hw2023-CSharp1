@@ -57,6 +57,69 @@ namespace Homework1
 
     public class Progress : IProgress
     {
+        private static int instanceCounter = 0;
+        private int num;
+        private int requiredProgress;
+        private int finishedProgress;
+
+        public Progress()
+        {
+            num = ++instanceCounter;
+            requiredProgress = 0;
+            finishedProgress = 0;
+        }
+
+        public int Num => num;
+        public int RequiredProgress => requiredProgress;
+        public int FinishedProgress => finishedProgress;
+
+        public bool Start(int requiredProgress)
+        {
+            if(requiredProgress < 0)
+            {
+                throw new ArgumentException("RequiredProgress must be positive.", nameof(requiredProgress));
+            }
+
+            if(this.finishedProgress >= this.requiredProgress)
+            {
+                this.requiredProgress = requiredProgress;
+                this.finishedProgress = 0;
+                return true;
+            }
+            return false;
+        }
+
+        public void Add(int addProgress)
+        {
+            this.finishedProgress += addProgress;
+            if(this.finishedProgress > this.requiredProgress)
+            {
+                this.finishedProgress = this.requiredProgress;
+            }
+        }
+
+        public void Sub(int subProgress)
+        {
+            this.finishedProgress -= subProgress;
+            if(this.finishedProgress < 0)
+            {
+                this.finishedProgress = 0;
+            }
+        }
+
+        public void Double()
+        {
+            this.finishedProgress *= 2;
+            if(this.finishedProgress > this.requiredProgress )
+            {
+                this.finishedProgress = this.requiredProgress;
+            }
+        }
+
+        public (int FinishedProgress,int RequiredProgress) GetProgress()
+        {
+            return (finishedProgress,requiredProgress);
+        }
         // 一个进度条
         // 只允许修改Progress类中的代码
         // 要求实现IProgress中的要求
